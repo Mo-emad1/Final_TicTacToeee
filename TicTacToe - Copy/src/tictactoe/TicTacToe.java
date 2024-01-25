@@ -114,3 +114,77 @@ public class TicTacToe{
             }
             }
             }
+   private void initializeBoardState() {
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                InitialState[i][j] = new EmptyState();
+             }
+             }
+             }
+
+    void computerMove() {
+        if (Gameover || !SinglePlayerMode || currentPlayer.equals(x)) {
+            return;
+        }
+
+        Random random = new Random();
+        int row, column;
+        do {
+            row = random.nextInt(3);
+            column = random.nextInt(3);
+        } while (!table[row][column].getText().equals(""));
+
+        table[row][column].setText(o);
+        Switchplayer++;
+        setSlotState(row, column, new OState()); // Update state
+        checkWinner();
+
+        if (!Gameover) {
+            currentPlayer = currentPlayer.equals(x) ? o : x;
+            GameLabel.setText(currentPlayer + "'s turn.");
+        }
+    }
+
+
+    void setSlotState(int row, int column, SlotState state) {
+        InitialState[row][column] = state;
+    }
+
+    void setWinner(JButton tile) {
+        tile.setForeground(Color.green);
+        tile.setBackground(Color.gray);
+        GameLabel.setForeground(Color.GREEN);
+        GameLabel.setText(currentPlayer + " is the winner!");
+    }
+
+    void setTie(JButton tile) {
+        tile.setForeground(Color.orange);
+        tile.setBackground(Color.gray);
+        GameLabel.setText("Tie!");
+    }
+
+    void checkWinner() {
+        for (int row = 0; row < 3; row++) {
+            if (table[row][0].getText() == "") continue;
+
+            if (table[row][0].getText().equals(table[row][1].getText()) &&
+                table[row][1].getText().equals(table[row][2].getText())) {
+                for (int i = 0; i < 3; i++) {
+                    setWinner(table[row][i]);
+                }
+                Gameover = true;
+                break;
+            }
+            }
+
+        for (int column = 0; column < 3; column++) {
+            if (table[0][column].getText() == "") continue;
+
+            if (table[0][column].getText().equals(table[1][column].getText()) &&
+                table[1][column].getText().equals(table[2][column].getText())) {
+                for (int i = 0; i < 3; i++) {
+                    setWinner(table[i][column]);
+                }
+                Gameover = true;
+                break;
+            }
