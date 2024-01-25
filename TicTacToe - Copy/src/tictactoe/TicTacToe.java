@@ -188,3 +188,61 @@ public class TicTacToe{
                 Gameover = true;
                 break;
             }
+}
+
+        if (table[0][0].getText().equals(table[1][1].getText()) &&
+            table[1][1].getText().equals(table[2][2].getText()) &&
+            !table[0][0].getText().equals("")) {
+            for (int i = 0; i < 3; i++) {
+                setWinner(table[i][i]);
+            }
+            Gameover = true;
+         }
+
+        if (table[0][2].getText().equals(table[1][1].getText()) &&
+            table[1][1].getText().equals(table[2][0].getText()) &&
+            !table[0][2].getText().equals("")) {
+            setWinner(table[0][2]);
+            setWinner(table[1][1]);
+            setWinner(table[2][0]);
+            Gameover = true;
+        }
+
+        if (Switchplayer == 9) {
+            for (int r = 0; r < 3; r++) {
+                for (int c = 0; c < 3; c++) {
+                    setTie(table[r][c]);
+                }
+            }
+            Gameover = true;
+        }
+
+        notifyObservers(Gameover, Gameover ? (currentPlayer + " is the winner!") : "Tie!");
+
+        drawBoard(TablePanel.getGraphics());
+    }
+
+   private void drawBoard(Graphics g) {
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                String symbol = table[i][j].getText();
+                if (symbol.equals(x)) {
+                    xShape.draw(g, i, j);
+                } else if (symbol.equals(o)) {
+                    oShape.draw(g, i, j);
+                }
+            }
+        }
+    }
+
+
+public void addObserver(GameObserver observer) {
+        Observers.add(observer);
+          }
+
+    private void notifyObservers(boolean isGameOver, String result) {
+        for (GameObserver observer : Observers) {
+             observer.updateGameStatus(isGameOver, result);
+        }
+      }
+      }
